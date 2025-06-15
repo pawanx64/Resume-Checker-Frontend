@@ -1,17 +1,53 @@
 // frontend/src/components/Upload.jsx
-import React, { useState } from 'react';
-import API from '../Api/Api'; // Make sure this path is correct
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import API from '../Api/Api';
+import Navbar from '../Components/Navbar';
 
 export const Upload = () => {
   const [file, setFile] = useState(null);
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false); // New state for loading indicator
-  const [error, setError] = useState(null);     // New state for error messages
+  const [fileUrl, setFileUrl] = useState(null); // State to store URL for display
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
+
+  // Effect to revoke the object URL when the component unmounts or fileUrl changes
+  useEffect(() => {
+    return () => {
+      if (fileUrl) {
+        URL.revokeObjectURL(fileUrl);
+      }
+    };
+  }, [fileUrl]); // Re-run effect if fileUrl changes
 
   const handleChange = (e) => {
-    setFile(e.target.files[0]);
-    setResult(null); // Clear previous results when a new file is selected
-    setError(null);  // Clear any previous errors
+    const selectedFile = e.target.files[0];
+
+    if (fileUrl) { // Revoke previous URL if a new file is selected
+      URL.revokeObjectURL(fileUrl);
+      setFileUrl(null);
+    }
+
+    if (selectedFile) {
+      const allowedTypes = [
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      ];
+      if (allowedTypes.includes(selectedFile.type)) {
+        setFile(selectedFile);
+        setError(null);
+        // Create an object URL for the selected file to display later
+        setFileUrl(URL.createObjectURL(selectedFile));
+      } else {
+        setFile(null);
+        setError("Invalid file type. Please upload a PDF (.pdf) or DOCX (.docx) file.");
+        e.target.value = ''; // Clear the input field visually
+      }
+    } else {
+      setFile(null);
+      setError(null);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -21,120 +57,97 @@ export const Upload = () => {
       return;
     }
 
-    setLoading(true); // Start loading
-    setError(null);   // Clear previous errors
-    setResult(null);  // Clear previous results
+    setLoading(true);
+    setError(null);
 
     const formData = new FormData();
-    formData.append("file", file); // 'file' here must match the key used in backend (req.files.file)
+    formData.append("file", file);
 
     try {
       const res = await API.post("/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" }, // Important for file uploads
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      setResult(res.data.analysis); // Set the analysis object from backend
+      // On successful analysis, navigate to the feedback page
+      // Pass analysis, fileUrl, fileName, and fileType to the feedback page
+      navigate('/feedback', {
+        state: {
+          analysis: res.data.analysis,
+          fileUrl: fileUrl,
+          fileName: file.name,
+          fileType: file.type
+        }
+      });
     } catch (err) {
       console.error("Upload error:", err);
-      // More user-friendly error message
       if (err.response && err.response.data && err.response.data.error) {
-        setError(err.response.data.error); // Display error message from backend
+        setError(err.response.data.error);
       } else {
         setError("Failed to analyze file. Please ensure the backend server is running and try again.");
       }
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
   return (
-    <div className="p-4 max-w-2xl mx-auto bg-white shadow-lg rounded-lg my-8">
-      <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">Resume Scanner</h2>
+    <div>
+      <Navbar/>
+      <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl bg-gray-800 shadow-2xl rounded-xl p-8 my-8 border border-gray-700">
+          <h2 className="text-4xl font-extrabold text-center mb-8 text-blue-400">
+            Resume AI Analyzer
+          </h2>
 
-      <form onSubmit={handleSubmit} className="mb-6 p-4 border border-gray-200 rounded-md bg-gray-50">
-        <label htmlFor="resume-file" className="block text-lg font-medium text-gray-700 mb-2">
-          Upload Your Resume (PDF or DOCX):
-        </label>
-        <input
-          id="resume-file"
-          type="file"
-          accept=".pdf,.docx"
-          onChange={handleChange}
-          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <button
-          type="submit"
-          className="mt-4 w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={loading} // Disable button when loading
-        >
-          {loading ? 'Analyzing...' : 'Upload & Analyze Resume'}
-        </button>
-      </form>
+          <form onSubmit={handleSubmit} className="mb-8 p-6 bg-gray-700 rounded-lg shadow-inner border border-gray-600">
+            <label htmlFor="resume-file" className="block text-xl font-medium text-gray-200 mb-4">
+              Upload Your Resume (PDF or DOCX)
+            </label>
+            <input
+              id="resume-file"
+              type="file"
+              accept=".pdf,.docx"
+              onChange={handleChange}
+              className="block w-full text-base text-gray-300
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-full file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-600 file:text-white
+                        hover:file:bg-blue-700
+                        cursor-pointer
+                        border border-gray-600 rounded-lg bg-gray-600
+                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-700"
+            />
+            <button
+              type="submit"
+              className="mt-6 w-full px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg shadow-md
+                        hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500
+                        focus:ring-offset-2 focus:ring-offset-gray-800
+                        transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed
+                        text-lg"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Analyzing...
+                </span>
+              ) : (
+                'Upload & Get Instant Feedback'
+              )}
+            </button>
+          </form>
 
-      {error && (
-        <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center">
-          <p>{error}</p>
-        </div>
-      )}
-
-      {result && (
-        <div className="mt-6 p-6 border border-gray-200 rounded-lg shadow-md bg-white">
-          <h3 className="text-2xl font-bold mb-4 text-gray-800">Gemini Analysis:</h3>
-
-          {result.score !== undefined && (
-            <div className="mb-4">
-              <p className="text-xl font-semibold text-gray-700 mb-2">Resume Score:
-                 <span className="ml-2 text-blue-600 text-3xl">{result.score}/100</span>
-              </p>
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div
-                  className="bg-green-500 h-3 rounded-full transition-all duration-500 ease-out"
-                  style={{ width: `${result.score}%` }}
-                ></div>
-              </div>
-            </div>
-          )}
-
-          {result.summary && (
-            <div className="mb-4">
-              <h4 className="font-semibold text-lg text-gray-700 mb-1">Summary:</h4>
-              <p className="text-gray-800 leading-relaxed">{result.summary}</p>
-            </div>
-          )}
-
-          {result.strengths && result.strengths.length > 0 && (
-            <div className="mb-4">
-              <h4 className="font-semibold text-lg text-gray-700 mb-1">Strengths:</h4>
-              <ul className="list-disc list-inside text-green-700 space-y-1">
-                {result.strengths.map((strength, index) => (
-                  <li key={`strength-${index}`}>{strength}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {result.weaknesses && result.weaknesses.length > 0 && (
-            <div className="mb-4">
-              <h4 className="font-semibold text-lg text-gray-700 mb-1">Weaknesses:</h4>
-              <ul className="list-disc list-inside text-red-700 space-y-1">
-                {result.weaknesses.map((weakness, index) => (
-                  <li key={`weakness-${index}`}>{weakness}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {result.tips_for_improvement && result.tips_for_improvement.length > 0 && (
-            <div>
-              <h4 className="font-semibold text-lg text-gray-700 mb-1">Tips for Improvement:</h4>
-              <ul className="list-disc list-inside text-purple-700 space-y-1">
-                {result.tips_for_improvement.map((tip, index) => (
-                  <li key={`tip-${index}`}>{tip}</li>
-                ))}
-              </ul>
+          {error && (
+            <div className="mt-6 p-4 bg-red-800 border border-red-600 text-red-100 rounded-lg text-center shadow-md">
+              <p className="font-medium">{error}</p>
             </div>
           )}
         </div>
-      )}
+      </div>
+
     </div>
   );
 };
