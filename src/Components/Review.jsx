@@ -1,0 +1,185 @@
+import React, { useState, useEffect } from 'react'; // Import useEffect
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react'; // Import icons for navigation and stars
+
+const CustomerReviewsSection = () => {
+  const reviews = [
+    {
+      id: 1,
+      rating: 5,
+      title: 'A Game Changer!',
+      text: 'ResumeChecker transformed my job search. The feedback was incredibly precise, helping me land interviews faster than ever before. Highly recommend!',
+      author: 'Sarah L.',
+      date: 'Aug 15, 2024',
+    },
+    {
+      id: 2,
+      rating: 4,
+      title: 'Very Helpful Tool',
+      text: 'The resume analysis is very insightful. It pointed out areas I never considered. While not perfect, it significantly improved my resume.',
+      author: 'Mark T.',
+      date: 'Jul 28, 2024',
+    },
+    {
+      id: 3,
+      rating: 5,
+      title: 'Excellent Resource!',
+      text: 'This is an excellent tool! I ran my resume through ResumeChecker and my first rating was a 37% which would not have been competitive. After revisions, I got to 85%!',
+      author: 'Patricia O.',
+      date: 'Jul 4, 2024',
+    },
+    {
+      id: 4,
+      rating: 4,
+      title: 'Improved My Confidence',
+      text: 'Jobscan helped me to fine-tune my resume. The experience was a positive one. The tool was easy to use and it helped me get the resume as close as possible to the job description.',
+      author: 'Stephen H.',
+      date: 'May 31, 2024',
+    },
+    {
+      id: 5,
+      rating: 5,
+      title: 'Wonderful Aide for Resume',
+      text: 'I love Jobscan because it helps me get my clients one step closer to obtaining an interview.',
+      author: 'Kathleen C.',
+      date: 'May 30, 2024',
+    },
+    {
+      id: 6,
+      rating: 5,
+      title: 'Highly Recommended!',
+      text: 'ResumeChecker is very helpful in tailoring the resume following job description. The AI generated suggestions are very helpful and easy to implement.',
+      author: 'Tania G.',
+      date: 'Feb 28, 2024',
+    },
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [reviewsPerPage, setReviewsPerPage] = useState(1); // Default for mobile
+
+  // Determine reviewsPerPage based on screen size
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) { // lg breakpoint
+        setReviewsPerPage(3);
+      } else if (window.innerWidth >= 768) { // md breakpoint
+        setReviewsPerPage(2);
+      } else { // sm breakpoint and below
+        setReviewsPerPage(1);
+      }
+    };
+
+    handleResize(); // Set initial value on component mount
+    window.addEventListener('resize', handleResize); // Add resize listener
+    return () => window.removeEventListener('resize', handleResize); // Clean up listener
+  }, []); // Empty dependency array means this effect runs once on mount and cleans up on unmount
+
+  const nextReviews = () => {
+    setCurrentIndex((prevIndex) => {
+      // Calculate the next index, ensuring it loops back to the start
+      // if we've reached the end of the carousel's effective range.
+      const next = prevIndex + 1;
+      if (next > reviews.length - reviewsPerPage) {
+        return 0; // Loop back to the first review
+      }
+      return next;
+    });
+  };
+
+  const prevReviews = () => {
+    setCurrentIndex((prevIndex) => {
+      // Calculate the previous index, ensuring it loops to the end
+      // if we've gone past the beginning.
+      const next = prevIndex - 1;
+      if (next < 0) {
+        return reviews.length - reviewsPerPage; // Loop to the last possible starting review
+      }
+      return next;
+    });
+  };
+
+  return (
+    <section  id="faq" className="scroll-smooth bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 py-20 md:py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative"> {/* Main relative container for buttons */}
+        <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-800 dark:text-white text-center mb-16">
+          What Our <span className="text-blue-600 dark:text-blue-400">Customers</span> Are Saying
+        </h2>
+
+        <div className='flex justify-center item-center'>
+                {/* Previous Button - positioned absolutely within the max-w-7xl container */}
+                <button
+                onClick={prevReviews}
+                className="absolute left-0 sm:left-4 top-1/2 -translate-y-1/2 p-4 rounded-full bg-blue-600 text-white shadow-xl
+                            hover:bg-blue-700 transition-all duration-300 z-10 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-75
+                            transform hover:scale-110"
+                aria-label="Previous reviews"
+                >
+                <ChevronLeft size={28} />
+                </button>
+
+                {/* Reviews Carousel Container - This div acts as the viewport for the sliding reviews */}
+                <div className="relative w-full overflow-hidden">
+                <div
+                    className="flex transition-transform duration-500 ease-in-out" // Flex container for all reviews, with smooth transition
+                    // Calculate translateX based on current index and the percentage width of each review
+                    style={{ transform: `translateX(-${(currentIndex * 100) / reviewsPerPage}%)` }}
+                >
+                    {reviews.map((review) => (
+                    <div
+                        key={review.id}
+                        // flex-shrink-0 prevents cards from shrinking.
+                        // Dynamic width classes ensure each card takes the correct percentage of the container width
+                        // based on how many reviews are visible per page.
+                        className={`flex-shrink-0 p-4 ${
+                        reviewsPerPage === 1 ? 'w-full' :
+                        reviewsPerPage === 2 ? 'w-1/2' :
+                        'w-1/3'
+                        }`}
+                    >
+                        {/* Individual Review Card */}
+                        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 flex flex-col justify-between
+                                        transform hover:scale-105 transition-transform duration-300 ease-in-out border border-transparent
+                                        hover:border-blue-300 dark:hover:border-blue-600 h-full"> {/* h-full ensures consistent card heights */}
+                        <div>
+                            <div className="flex mb-4">
+                            {[...Array(5)].map((_, i) => (
+                                <Star
+                                key={i}
+                                size={24}
+                                fill={i < review.rating ? '#FBBF24' : '#E5E7EB'} // Yellow for filled, light gray for empty
+                                stroke={i < review.rating ? '#FBBF24' : '#D1D5DB'} // Stroke color
+                                className="mr-1"
+                                />
+                            ))}
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 leading-tight">{review.title}</h3>
+                            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">
+                            "{review.text}"
+                            </p>
+                        </div>
+                        <div className="text-right pt-4 border-t border-gray-100 dark:border-gray-700">
+                            <p className="text-gray-800 dark:text-gray-200 font-semibold text-lg">{review.author}</p>
+                            <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{review.date}</p>
+                        </div>
+                        </div>
+                    </div>
+                    ))}
+                </div>
+                </div>
+
+                {/* Next Button - positioned absolutely within the max-w-7xl container */}
+                <button
+                onClick={nextReviews}
+                className="absolute right-0 sm:right-4 top-1/2 -translate-y-1/2 p-4 rounded-full bg-blue-600 text-white shadow-xl
+                            hover:bg-blue-700 transition-all duration-300 z-10 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-75
+                            transform hover:scale-110"
+                aria-label="Next reviews"
+                >
+                <ChevronRight size={28} />
+                </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default CustomerReviewsSection;
