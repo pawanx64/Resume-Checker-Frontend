@@ -58,7 +58,7 @@ export const Upload = () => {
     formData.append('file', file);
 
     try {
-      const res = await API.post('/upload', formData, {
+      const res = await API.post('https://resume-checker-backend.vercel.app/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
