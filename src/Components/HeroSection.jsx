@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const HeroSection = () => {
   const navigate=useNavigate();
   const handleGoToUpload=()=>{
-    navigate('/Upload');
+    navigate('https://resume-checker-frontend-puce.vercel.app/Upload');
   }
   return (
     // Hero section container with responsive padding and a subtle gradient background
