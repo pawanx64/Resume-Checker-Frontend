@@ -6,8 +6,8 @@ const Navbar = () => {
 
   const links = [
     { name: 'Home', href: '/' },
-    { name: 'Resume Score', href: 'Upload' },
-    { name: 'About', href: 'About' },
+    { name: 'Resume Score', href: 'https://resume-checker-frontend-puce.vercel.app/Upload' },
+    { name: 'About', href: 'https://resume-checker-frontend-puce.vercel.app/About' },
   ];
 
   return (
