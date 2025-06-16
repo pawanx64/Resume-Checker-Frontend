@@ -28,11 +28,11 @@ const Footer = () => {
           </div>
 
           {/* Contact Information */}
-          <div className="flex flex-col items-center md:items-start space-y-3">
+          <div className="flex flex-col items-center md:items-start space-y-3 text-center">
             <h4 className="text-lg font-semibold text-white mb-2">Contact Us</h4>
             <p className="text-gray-400">Email: info@resumechecker.com</p>
             <p className="text-gray-400">Phone: +1 (123) 456-7890</p>
-            <p className="text-gray-400">Address: 123 Resume Lane, Job City, JC 12345</p>
+            <p className="text-gray-400 ">Address: 123 Resume Lane, Job City, JC 12345</p>
           </div>
 
           {/* Social Media Links */}

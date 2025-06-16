@@ -39,7 +39,7 @@ export const About = () => {
         <div className="absolute inset-0 z-0 opacity-10" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.2\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0 20v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 46v-4h-2v4H0v2h4v4h2v-4h4v-2H6zM36 0v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 8v-4h-2v4H0v2h4v4h2v-4h4v-2H6zM36 12v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM18 12v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM18 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM18 0v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM0 20v-4h-2v4H0v2h4v4h2v-4h4v-2H6zM0 34v-4h-2v4H0v2h4v4h2v-4h4v-2H6zM42 20v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM42 42v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM42 0v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM0 0v-4h-2v4H0v2h4v4h2v-4h4v-2H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }}
         ></div>
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 animate-fadeInUp">
+          <h1 className="text-3xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 animate-fadeInUp">
             About <span className="text-yellow-300">ResumeChecker</span>
           </h1>
           <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto opacity-0 animate-fadeIn delay-300">
@@ -51,7 +51,7 @@ export const About = () => {
       {/* Our Mission Section */}
       <section className="py-20 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="md:pr-8">
+          <div className="md:pr-8 text-center md:text-left px-4">
             <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-6">
               Our <span className="text-blue-600 dark:text-blue-400">Mission</span>
             </h2>
@@ -100,7 +100,7 @@ export const About = () => {
       </section>
 
       {/* Our Story Section */}
-      <section className="py-20 md:py-24">
+      <section className="py-20 md:py-24  text-center md:text-left px-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden p-6 md:p-8 order-2 md:order-1 transform hover:scale-105 transition-transform duration-300">
             {/* Placeholder video for story */}

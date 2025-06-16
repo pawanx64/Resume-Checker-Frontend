@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'; // Import useEffect
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react'; // Import icons for navigation and stars
+import React, { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
 const CustomerReviewsSection = () => {
   const reviews = [
@@ -56,7 +56,10 @@ const CustomerReviewsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [reviewsPerPage, setReviewsPerPage] = useState(1); // Default for mobile
 
-  // Determine reviewsPerPage based on screen size
+  // Ref for the carousel container to enable keyboard navigation
+  const carouselRef = useRef(null);
+
+  // Determine reviewsPerPage based on screen size and handle keyboard navigation
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) { // lg breakpoint
@@ -68,15 +71,31 @@ const CustomerReviewsSection = () => {
       }
     };
 
+    const handleKeyDown = (event) => {
+      if (event.key === 'ArrowLeft') {
+        prevReviews();
+      } else if (event.key === 'ArrowRight') {
+        nextReviews();
+      }
+    };
+
     handleResize(); // Set initial value on component mount
     window.addEventListener('resize', handleResize); // Add resize listener
-    return () => window.removeEventListener('resize', handleResize); // Clean up listener
-  }, []); // Empty dependency array means this effect runs once on mount and cleans up on unmount
+    if (carouselRef.current) {
+      carouselRef.current.addEventListener('keydown', handleKeyDown); // Add keyboard listener
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize); // Clean up resize listener
+      if (carouselRef.current) {
+        carouselRef.current.removeEventListener('keydown', handleKeyDown); // Clean up keyboard listener
+      }
+    };
+  }, [currentIndex, reviewsPerPage]); // Add dependencies to re-bind event listener if state changes
 
   const nextReviews = () => {
     setCurrentIndex((prevIndex) => {
       // Calculate the next index, ensuring it loops back to the start
-      // if we've reached the end of the carousel's effective range.
       const next = prevIndex + 1;
       if (next > reviews.length - reviewsPerPage) {
         return 0; // Loop back to the first review
@@ -88,7 +107,6 @@ const CustomerReviewsSection = () => {
   const prevReviews = () => {
     setCurrentIndex((prevIndex) => {
       // Calculate the previous index, ensuring it loops to the end
-      // if we've gone past the beginning.
       const next = prevIndex - 1;
       if (next < 0) {
         return reviews.length - reviewsPerPage; // Loop to the last possible starting review
@@ -97,85 +115,110 @@ const CustomerReviewsSection = () => {
     });
   };
 
+  // Calculate the total number of "pages" or sets of reviews
+  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+
   return (
-    <section  id="faq" className="scroll-smooth bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 py-20 md:py-24 lg:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative"> {/* Main relative container for buttons */}
-        <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-800 dark:text-white text-center mb-16">
+    <section id="reviews" className="scroll-smooth bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 py-20 md:py-24 lg:py-32"
+      aria-labelledby="reviews-heading" role="region">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <h2 id="reviews-heading" className="text-4xl sm:text-5xl font-extrabold text-gray-800 dark:text-white text-center mb-16">
           What Our <span className="text-blue-600 dark:text-blue-400">Customers</span> Are Saying
         </h2>
 
-        <div className='flex justify-center item-center'>
-                {/* Previous Button - positioned absolutely within the max-w-7xl container */}
-                <button
-                onClick={prevReviews}
-                className="absolute left-0 sm:left-4 top-1/2 -translate-y-1/2 p-4 rounded-full bg-blue-600 text-white shadow-xl
-                            hover:bg-blue-700 transition-all duration-300 z-10 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-75
-                            transform hover:scale-110"
-                aria-label="Previous reviews"
-                >
-                <ChevronLeft size={28} />
-                </button>
+        <div className="flex items-center justify-center">
+          {/* Previous Button */}
+          <button
+            onClick={prevReviews}
+            className="absolute left-0 sm:left-4 top-1/2 -translate-y-1/2 p-3 sm:p-4 rounded-full bg-blue-600 text-white shadow-xl
+                       hover:bg-blue-700 transition-all duration-300 z-10 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-75
+                       transform hover:scale-110"
+            aria-label="Previous reviews"
+          >
+            <ChevronLeft size={28} />
+          </button>
 
-                {/* Reviews Carousel Container - This div acts as the viewport for the sliding reviews */}
-                <div className="relative w-full overflow-hidden">
+          {/* Reviews Carousel Container */}
+          <div
+            ref={carouselRef}
+            tabIndex="0" // Makes the div focusable for keyboard navigation
+            className="relative w-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 rounded-xl"
+          >
+            <div
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${(currentIndex * 100) / reviewsPerPage}%)` }}
+            >
+              {reviews.map((review) => (
                 <div
-                    className="flex transition-transform duration-500 ease-in-out" // Flex container for all reviews, with smooth transition
-                    // Calculate translateX based on current index and the percentage width of each review
-                    style={{ transform: `translateX(-${(currentIndex * 100) / reviewsPerPage}%)` }}
+                  key={review.id}
+                  className={`flex-shrink-0 p-2 sm:p-4 ${
+                    reviewsPerPage === 1 ? 'w-full' :
+                    reviewsPerPage === 2 ? 'w-1/2' :
+                    'w-1/3'
+                  }`}
                 >
-                    {reviews.map((review) => (
-                    <div
-                        key={review.id}
-                        // flex-shrink-0 prevents cards from shrinking.
-                        // Dynamic width classes ensure each card takes the correct percentage of the container width
-                        // based on how many reviews are visible per page.
-                        className={`flex-shrink-0 p-4 ${
-                        reviewsPerPage === 1 ? 'w-full' :
-                        reviewsPerPage === 2 ? 'w-1/2' :
-                        'w-1/3'
-                        }`}
-                    >
-                        {/* Individual Review Card */}
-                        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 flex flex-col justify-between
-                                        transform hover:scale-105 transition-transform duration-300 ease-in-out border border-transparent
-                                        hover:border-blue-300 dark:hover:border-blue-600 h-full"> {/* h-full ensures consistent card heights */}
-                        <div>
-                            <div className="flex mb-4">
-                            {[...Array(5)].map((_, i) => (
-                                <Star
-                                key={i}
-                                size={24}
-                                fill={i < review.rating ? '#FBBF24' : '#E5E7EB'} // Yellow for filled, light gray for empty
-                                stroke={i < review.rating ? '#FBBF24' : '#D1D5DB'} // Stroke color
-                                className="mr-1"
-                                />
-                            ))}
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 leading-tight">{review.title}</h3>
-                            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">
-                            "{review.text}"
-                            </p>
-                        </div>
-                        <div className="text-right pt-4 border-t border-gray-100 dark:border-gray-700">
-                            <p className="text-gray-800 dark:text-gray-200 font-semibold text-lg">{review.author}</p>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{review.date}</p>
-                        </div>
-                        </div>
-                    </div>
-                    ))}
-                </div>
-                </div>
+                  {/* Individual Review Card */}
+                  <div className="relative bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-6 sm:p-8 flex flex-col justify-between
+                                  transform hover:scale-[1.02] transition-transform duration-300 ease-in-out border border-transparent
+                                  hover:border-blue-300 dark:hover:border-blue-600 h-full overflow-hidden">
+                    {/* Background Quote Icon */}
+                    <span className="absolute -top-4 -right-4 md:-top-8 md:-right-8 text-gray-200 dark:text-gray-700 text-8xl md:text-[10rem] font-serif opacity-30 z-0">
+                      &ldquo;
+                    </span>
 
-                {/* Next Button - positioned absolutely within the max-w-7xl container */}
-                <button
-                onClick={nextReviews}
-                className="absolute right-0 sm:right-4 top-1/2 -translate-y-1/2 p-4 rounded-full bg-blue-600 text-white shadow-xl
-                            hover:bg-blue-700 transition-all duration-300 z-10 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-75
-                            transform hover:scale-110"
-                aria-label="Next reviews"
-                >
-                <ChevronRight size={28} />
-                </button>
+                    <div className="relative z-10"> {/* Ensure content is above the quote icon */}
+                      <div className="flex mb-4">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            size={24}
+                            fill={i < review.rating ? '#FBBF24' : '#E5E7EB'}
+                            stroke={i < review.rating ? '#FBBF24' : '#D1D5DB'}
+                            className="mr-1"
+                          />
+                        ))}
+                      </div>
+                      <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4 leading-tight">{review.title}</h3>
+                      <p className="text-gray-700 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-4 sm:mb-6">
+                        "{review.text}"
+                      </p>
+                    </div>
+                    <div className="text-right pt-4 border-t border-gray-100 dark:border-gray-700 relative z-10">
+                      <p className="text-gray-800 dark:text-gray-200 font-semibold text-lg">{review.author}</p>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{review.date}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Next Button */}
+          <button
+            onClick={nextReviews}
+            className="absolute right-0 sm:right-4 top-1/2 -translate-y-1/2 p-3 sm:p-4 rounded-full bg-blue-600 text-white shadow-xl
+                       hover:bg-blue-700 transition-all duration-300 z-10 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-75
+                       transform hover:scale-110"
+            aria-label="Next reviews"
+          >
+            <ChevronRight size={28} />
+          </button>
+        </div>
+
+        {/* Navigation Dots */}
+        <div className="flex justify-center mt-8 space-x-2">
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index * reviewsPerPage)} // Jump to the start of the relevant set of reviews
+              className={`h-3 rounded-full transition-all duration-300
+                ${Math.floor(currentIndex / reviewsPerPage) === index
+                  ? 'bg-blue-600 w-8' // Active dot style, wider
+                  : 'bg-gray-300 dark:bg-gray-600 w-3'
+                }`}
+              aria-label={`Go to review set ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>
