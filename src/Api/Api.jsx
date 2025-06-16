@@ -1,6 +1,6 @@
 import axios from "axios";
 const API=axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://resume-checker-backend.vercel.app",
   headers: {
     'Content-Type': 'application/json', // Default content type
   },
