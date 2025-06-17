@@ -49,7 +49,7 @@ const Navbar = () => {
       <nav className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg fixed w-full z-50
                       transition-colors duration-500 ease-in-out">
         {/* Adjusted padding for responsiveness: tighter on very small screens, expands on larger */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+        <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8 flex justify-between items-center h-16">
           {/* Logo/Brand Name */}
           <div className="flex items-center">
             <a
