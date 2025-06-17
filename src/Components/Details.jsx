@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Minus } from 'lucide-react'; // Import Plus and Minus icons
+import Navbar from '../Components/Navbar';
 
 const FAQSection = () => {
   const faqItems = [
@@ -42,55 +43,59 @@ const FAQSection = () => {
   };
 
   return (
-    <section className="bg-white dark:bg-gray-900 py-20 md:py-24 lg:py-32">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-800 dark:text-white text-center mb-16">
-          Frequently Asked <span className="text-purple-600 dark:text-purple-400">Questions</span>
-        </h2>
+    <div>
+       <Navbar/>
+      <section className="bg-white dark:bg-gray-900 py-20 md:py-24 lg:py-32">
+      
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-800 dark:text-white text-center mb-16">
+            Frequently Asked <span className="text-purple-600 dark:text-purple-400">Questions</span>
+          </h2>
 
-        <div className="space-y-6">
-          {faqItems.map((item) => (
-            <div
-              key={item.id}
-              className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md overflow-hidden
-                         border border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out"
-            >
-              <button
-                className="flex justify-between items-center w-full p-6 text-left
-                           text-xl font-semibold text-gray-800 dark:text-white
-                           hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                onClick={() => toggleFAQ(item.id)}
-                aria-expanded={openItemId === item.id}
-                aria-controls={`faq-content-${item.id}`}
+          <div className="space-y-6">
+            {faqItems.map((item) => (
+              <div
+                key={item.id}
+                className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md overflow-hidden
+                          border border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out"
               >
-                {item.question}
-                {openItemId === item.id ? (
-                  <Minus size={24} className="text-purple-600 dark:text-purple-400" />
-                ) : (
-                  <Plus size={24} className="text-gray-600 dark:text-gray-400" />
-                )}
-              </button>
-              {openItemId === item.id && (
-                <div
-                  id={`faq-content-${item.id}`}
-                  className="px-6 pb-6 text-gray-700 dark:text-gray-300 text-lg leading-relaxed animate-fadeIn"
+                <button
+                  className="flex justify-between items-center w-full p-6 text-left
+                            text-xl font-semibold text-gray-800 dark:text-white
+                            hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                  onClick={() => toggleFAQ(item.id)}
+                  aria-expanded={openItemId === item.id}
+                  aria-controls={`faq-content-${item.id}`}
                 >
-                  {item.answer}
-                </div>
-              )}
-            </div>
-          ))}
+                  {item.question}
+                  {openItemId === item.id ? (
+                    <Minus size={24} className="text-purple-600 dark:text-purple-400" />
+                  ) : (
+                    <Plus size={24} className="text-gray-600 dark:text-gray-400" />
+                  )}
+                </button>
+                {openItemId === item.id && (
+                  <div
+                    id={`faq-content-${item.id}`}
+                    className="px-6 pb-6 text-gray-700 dark:text-gray-300 text-lg leading-relaxed animate-fadeIn"
+                  >
+                    {item.answer}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-      {/* Tailwind CSS keyframes for fade-in animation */}
-      <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
-      `}</style>
-    </section>
+        {/* Tailwind CSS keyframes for fade-in animation */}
+        <style jsx>{`
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+        `}</style>
+      </section>
+    </div>
   );
 };
 
