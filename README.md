@@ -23,7 +23,7 @@ A user-friendly Resume Checker web app that helps job seekers analyze and enhanc
 - **Backend**: Node.js, Express.js  
 - **File Parsing**: Multer, PDF‑parse, Docx‑parser  
 - **AI Integration**: OpenAI API (optional)  
-- **Deployment**: Vercel (Frontend), Backend (Backend)
+- **Deployment**: Vercel (Frontend), Vercel (Backend)
 
 ---
 
