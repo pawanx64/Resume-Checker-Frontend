@@ -3,9 +3,14 @@ import { Lightbulb, Users, Handshake, Gem } from 'lucide-react'; // Icons for va
 import logo from "../Assests/image3.avif";
 import logo1 from "../Assests/video.mp4";
 import Navbar from '../Components/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 export const About = () => {
     // Data for the 'Our Values' section
+    const navigate = useNavigate();
+    const handleStartAnalysis = () => {
+    navigate('/Upload');
+  };
   const values = [
     {
       icon: Lightbulb, // Icon for Innovation
@@ -136,13 +141,13 @@ export const About = () => {
           <p className="text-lg md:text-xl mb-10 opacity-90">
             Join thousands of satisfied job seekers who have landed interviews with ResumeChecker.
           </p>
-          <a
-            href="/Upload" // Link to your upload section
+          <button
+            onClick={handleStartAnalysis} // Link to your upload section
             className="inline-block bg-white text-blue-600 font-bold py-4 px-10 rounded-full text-xl shadow-lg
                        hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 ease-in-out"
           >
             Start Your Free Analysis Today
-          </a>
+          </button>
         </div>
       </section>
 
