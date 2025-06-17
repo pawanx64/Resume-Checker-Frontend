@@ -23,20 +23,17 @@ const Navbar = () => {
     };
 
     // Add event listener when the menu is open
-    // We only add it if menuOpen is true, and clean it up when menuOpen becomes false or component unmounts
     if (menuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-      // Optional: Add touchstart for better mobile responsiveness for tap outside
       document.addEventListener('touchstart', handleClickOutside);
     }
 
     // Clean up the event listeners
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      // Clean up touchstart listener too
       document.removeEventListener('touchstart', handleClickOutside);
     };
-  }, [menuOpen]); // Dependency array: re-run effect when menuOpen state changes
+  }, [menuOpen]);
 
   const handleLinkClick = (path) => {
     navigate(path);
@@ -45,17 +42,22 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Navbar container with responsive styling */}
       <nav className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg fixed w-full z-50
                       transition-colors duration-500 ease-in-out">
-        {/* Adjusted padding for responsiveness: tighter on very small screens, expands on larger */}
-        <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+        {/*
+          Refined padding: px-4 for default (smallest screens), sm:px-6, lg:px-8
+          Refined height: h-14 for default (smallest screens), md:h-16 for medium and up
+          Ensures consistency and breathing room on all devices, especially very small ones.
+        */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-14 md:h-16">
           {/* Logo/Brand Name */}
           <div className="flex items-center">
             <a
               onClick={() => handleLinkClick('/')}
+              // Adjust logo font size for really small devices if needed, currently good.
+              // text-xl (20px) is fine, but you could add xs:text-lg if you want it tiny on very small screens.
               className="text-xl sm:text-2xl font-extrabold tracking-tight text-white hover:text-yellow-300 transition duration-300 cursor-pointer"
-              aria-label="Go to Home page" // Added for accessibility
+              aria-label="Go to Home page"
             >
               Resume<span className="text-yellow-300">Checker</span>
             </a>
@@ -70,7 +72,7 @@ const Navbar = () => {
                 className="relative text-base lg:text-lg font-medium text-white hover:text-yellow-300 transition duration-300
                            before:absolute before:bottom-0 before:left-0 before:w-0 before:h-0.5 before:bg-yellow-300 before:transition-all before:duration-300
                            hover:before:w-full cursor-pointer"
-                aria-label={`Maps to ${link.name} page`} // Added for accessibility
+                aria-label={`Maps to ${link.name} page`}
               >
                 {link.name}
               </a>
@@ -81,10 +83,11 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-300 p-2 rounded-md"
+              // Increased padding slightly for larger touch target on small screens
+              className="text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-300 p-3 rounded-md"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
-              aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"} // Added for accessibility
+              aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
             >
               {menuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -92,7 +95,6 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Links (conditionally rendered and animated) */}
-        {/* The ref is attached here to detect clicks outside this div */}
         <div
           ref={menuRef}
           id="mobile-menu"
@@ -106,7 +108,7 @@ const Navbar = () => {
               onClick={() => handleLinkClick(link.path)}
               className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600
                          hover:text-yellow-300 transition duration-300 cursor-pointer"
-              aria-label={`Maps to ${link.name} page`} // Added for accessibility
+              aria-label={`Maps to ${link.name} page`}
             >
               {link.name}
             </a>
