@@ -13,7 +13,6 @@ const Navbar = () => {
     { name: 'About', path: '/About' },
   ];
 
-  // Close menu on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuOpen && menuRef.current && !menuRef.current.contains(e.target)) {
@@ -25,7 +24,6 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [menuOpen]);
 
-  // Prevent body scroll when menu is open
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = 'hidden';
@@ -42,7 +40,6 @@ const Navbar = () => {
   return (
     <nav className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-14 md:h-16">
-        {/* Logo */}
         <div className="flex items-center">
           <span
             onClick={() => handleLinkClick('/')}
@@ -52,7 +49,6 @@ const Navbar = () => {
           </span>
         </div>
 
-        {/* Desktop Links */}
         <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
           {links.map((link) => (
             <span
@@ -67,7 +63,6 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Mobile Menu Button */}
         <div className="md:hidden">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -79,7 +74,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div
         ref={menuRef}
         className={`md:hidden bg-indigo-700 transition-all duration-300 ease-in-out overflow-hidden

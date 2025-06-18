@@ -1,18 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react'; // Import useRef for animation frame
+import React, { useEffect, useState, useRef } from 'react'; 
 import { useLocation, useNavigate } from 'react-router-dom';
-import Navbar from '../Components/Navbar'; // Assuming Navbar is the top bar with "GET PRO", "LIVE ANALYSIS", "MAGIC WRITE"
+import Navbar from '../Components/Navbar'; 
 
 export const Feedback = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { analysis } = location.state || {};
 
-  // State to control the animated width of the progress bar
   const [animatedScoreWidth, setAnimatedScoreWidth] = useState(0);
-  // New state to control the animated numerical score
   const [displayedScore, setDisplayedScore] = useState(0);
 
-  const animationFrameRef = useRef(null); // Ref to store the animation frame ID
+  const animationFrameRef = useRef(null); 
 
   useEffect(() => {
     if (!analysis) {
@@ -21,15 +19,14 @@ export const Feedback = () => {
       // Animate the score bar
       const barAnimationTimer = setTimeout(() => {
         setAnimatedScoreWidth(analysis.score);
-      }, 100); // Small delay to ensure CSS transition applies
+      }, 100); 
 
-      // Animate the numerical score
       const start = Date.now();
-      const duration = 700; // Match this with your CSS transition duration for the bar
+      const duration = 700;
 
       const animateScore = () => {
         const elapsed = Date.now() - start;
-        const progress = Math.min(elapsed / duration, 1); // Clamp progress between 0 and 1
+        const progress = Math.min(elapsed / duration, 1); 
         const currentScore = Math.floor(progress * analysis.score);
         setDisplayedScore(currentScore);
 
@@ -40,7 +37,6 @@ export const Feedback = () => {
 
       animationFrameRef.current = requestAnimationFrame(animateScore);
 
-      // Cleanup function
       return () => {
         clearTimeout(barAnimationTimer);
         cancelAnimationFrame(animationFrameRef.current);
@@ -76,7 +72,6 @@ export const Feedback = () => {
               {score !== undefined && (
                 <div className="mt-4 mb-6 bg-gray-700 p-4 rounded-2xl border border-gray-600 flex flex-col items-center justify-center shadow-inner">
                   <p className="text-sm lg:text-3xl md:text-2xl sm:text-2xl font-semibold text-gray-200 mb-4">Resume Score:</p>
-                  {/* Display the animated numerical score */}
                   <span className="text-blue-400 text-2xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-wide">
                     {displayedScore}/100
                   </span>

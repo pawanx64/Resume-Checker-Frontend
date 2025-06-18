@@ -6,19 +6,16 @@ const FeaturesSection = () => {
     <section id="about" className="bg-white dark:bg-gray-900 py-16 md:py-20 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20 lg:space-y-32">
 
-        {/* Feature 1: Resume Optimization */}
         <div className="flex flex-col md:flex-row items-center gap-12">
-          {/* Illustration/Image for Feature 1 (Left Side) */}
           <div className="md:w-1/2 flex justify-center">
             <img
-              src={logo} // Placeholder for Skills Analysis
+              src={logo} 
               alt="Resume Skills Analysis"
               className="rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-500 ease-in-out"
               onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/500x350/E0F2FE/1E40AF?text=Image+Not+Found"; }}
             />
           </div>
 
-          {/* Text Content for Feature 1 (Right Side) */}
           <div className="md:w-1/2 text-center md:text-left">
             <h2 className="text-4xl font-extrabold text-gray-800 dark:text-white mb-4">
               <span className="text-blue-600">RESUME OPTIMIZATION</span>

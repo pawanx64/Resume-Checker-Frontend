@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Minus } from 'lucide-react'; // Import Plus and Minus icons
+import { Plus, Minus } from 'lucide-react';
 import Navbar from '../Components/Navbar';
 
 const FAQSection = () => {
@@ -36,10 +36,10 @@ const FAQSection = () => {
     },
   ];
 
-  const [openItemId, setOpenItemId] = useState(null); // State to track which FAQ item is open
+  const [openItemId, setOpenItemId] = useState(null); 
 
   const toggleFAQ = (id) => {
-    setOpenItemId(openItemId === id ? null : id); // Toggle open/close
+    setOpenItemId(openItemId === id ? null : id); 
   };
 
   return (

@@ -54,19 +54,17 @@ const CustomerReviewsSection = () => {
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [reviewsPerPage, setReviewsPerPage] = useState(1); // Default for mobile
+  const [reviewsPerPage, setReviewsPerPage] = useState(1);
 
-  // Ref for the carousel container to enable keyboard navigation
   const carouselRef = useRef(null);
 
-  // Determine reviewsPerPage based on screen size and handle keyboard navigation
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) { // lg breakpoint
+      if (window.innerWidth >= 1024) {
         setReviewsPerPage(3);
-      } else if (window.innerWidth >= 768) { // md breakpoint
+      } else if (window.innerWidth >= 768) { 
         setReviewsPerPage(2);
-      } else { // sm breakpoint and below
+      } else { 
         setReviewsPerPage(1);
       }
     };
@@ -79,26 +77,25 @@ const CustomerReviewsSection = () => {
       }
     };
 
-    handleResize(); // Set initial value on component mount
-    window.addEventListener('resize', handleResize); // Add resize listener
+    handleResize(); 
+    window.addEventListener('resize', handleResize); 
     if (carouselRef.current) {
-      carouselRef.current.addEventListener('keydown', handleKeyDown); // Add keyboard listener
+      carouselRef.current.addEventListener('keydown', handleKeyDown); 
     }
 
     return () => {
-      window.removeEventListener('resize', handleResize); // Clean up resize listener
+      window.removeEventListener('resize', handleResize);
       if (carouselRef.current) {
-        carouselRef.current.removeEventListener('keydown', handleKeyDown); // Clean up keyboard listener
+        carouselRef.current.removeEventListener('keydown', handleKeyDown);
       }
     };
-  }, [currentIndex, reviewsPerPage]); // Add dependencies to re-bind event listener if state changes
+  }, [currentIndex, reviewsPerPage]); 
 
   const nextReviews = () => {
     setCurrentIndex((prevIndex) => {
-      // Calculate the next index, ensuring it loops back to the start
       const next = prevIndex + 1;
       if (next > reviews.length - reviewsPerPage) {
-        return 0; // Loop back to the first review
+        return 0; 
       }
       return next;
     });
@@ -106,16 +103,14 @@ const CustomerReviewsSection = () => {
 
   const prevReviews = () => {
     setCurrentIndex((prevIndex) => {
-      // Calculate the previous index, ensuring it loops to the end
       const next = prevIndex - 1;
       if (next < 0) {
-        return reviews.length - reviewsPerPage; // Loop to the last possible starting review
+        return reviews.length - reviewsPerPage; 
       }
       return next;
     });
   };
 
-  // Calculate the total number of "pages" or sets of reviews
   const totalPages = Math.ceil(reviews.length / reviewsPerPage);
 
   return (
@@ -127,7 +122,6 @@ const CustomerReviewsSection = () => {
         </h2>
 
         <div className="flex items-center justify-center">
-          {/* Previous Button */}
           <button
             onClick={prevReviews}
             className="absolute left-0 sm:left-4 top-1/2 -translate-y-1/2 p-3 sm:p-4 rounded-full bg-blue-600 text-white shadow-xl
@@ -138,10 +132,9 @@ const CustomerReviewsSection = () => {
             <ChevronLeft size={28} />
           </button>
 
-          {/* Reviews Carousel Container */}
           <div
             ref={carouselRef}
-            tabIndex="0" // Makes the div focusable for keyboard navigation
+            tabIndex="0" 
             className="relative w-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 rounded-xl"
           >
             <div
@@ -157,16 +150,14 @@ const CustomerReviewsSection = () => {
                     'w-1/3'
                   }`}
                 >
-                  {/* Individual Review Card */}
                   <div className="relative bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-6 sm:p-8 flex flex-col justify-between
                                   transform hover:scale-[1.02] transition-transform duration-300 ease-in-out border border-transparent
                                   hover:border-blue-300 dark:hover:border-blue-600 h-full overflow-hidden">
-                    {/* Background Quote Icon */}
                     <span className="absolute -top-4 -right-4 md:-top-8 md:-right-8 text-gray-200 dark:text-gray-700 text-8xl md:text-[10rem] font-serif opacity-30 z-0">
                       &ldquo;
                     </span>
 
-                    <div className="relative z-10"> {/* Ensure content is above the quote icon */}
+                    <div className="relative z-10"> 
                       <div className="flex mb-4">
                         {[...Array(5)].map((_, i) => (
                           <Star
@@ -193,7 +184,6 @@ const CustomerReviewsSection = () => {
             </div>
           </div>
 
-          {/* Next Button */}
           <button
             onClick={nextReviews}
             className="absolute right-0 sm:right-4 top-1/2 -translate-y-1/2 p-3 sm:p-4 rounded-full bg-blue-600 text-white shadow-xl
@@ -205,15 +195,14 @@ const CustomerReviewsSection = () => {
           </button>
         </div>
 
-        {/* Navigation Dots */}
         <div className="flex justify-center mt-8 space-x-2">
           {Array.from({ length: totalPages }).map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentIndex(index * reviewsPerPage)} // Jump to the start of the relevant set of reviews
+              onClick={() => setCurrentIndex(index * reviewsPerPage)} 
               className={`h-3 rounded-full transition-all duration-300
                 ${Math.floor(currentIndex / reviewsPerPage) === index
-                  ? 'bg-blue-600 w-8' // Active dot style, wider
+                  ? 'bg-blue-600 w-8'
                   : 'bg-gray-300 dark:bg-gray-600 w-3'
                 }`}
               aria-label={`Go to review set ${index + 1}`}

@@ -1,46 +1,42 @@
 import React from 'react'
-import { Lightbulb, Users, Handshake, Gem } from 'lucide-react'; // Icons for values section
+import { Lightbulb, Users, Handshake, Gem } from 'lucide-react'; 
 import logo from "../Assests/image3.avif";
 import logo1 from "../Assests/video.mp4";
 import Navbar from '../Components/Navbar';
 import { useNavigate } from 'react-router-dom';
 
 export const About = () => {
-    // Data for the 'Our Values' section
     const navigate = useNavigate();
     const handleStartAnalysis = () => {
     navigate('/Upload');
   };
   const values = [
     {
-      icon: Lightbulb, // Icon for Innovation
+      icon: Lightbulb, 
       title: 'Innovation',
       description: 'Constantly seeking new ways to empower job seekers with cutting-edge tools and insights.'
     },
     {
-      icon: Users, // Icon for User-Centricity
+      icon: Users, 
       title: 'User-Centricity',
       description: 'Building solutions that are intuitive, effective, and truly meet the evolving needs of our users.'
     },
     {
-      icon: Handshake, // Icon for Integrity
+      icon: Handshake, 
       title: 'Integrity',
       description: 'Operating with honesty, transparency, and an unwavering commitment to our users\' success.'
     },
     {
-      icon: Gem, // Icon for Quality
+      icon: Gem, 
       title: 'Quality',
       description: 'Delivering precise, reliable, and high-quality resume analysis and actionable feedback.'
     },
   ];
   return (
-      // Main container for the About Us page, with a unique ID for navigation
       <div id="about" className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
         <Navbar/>
 
-      {/* Hero Section for About Us */}
       <section className="relative py-24 md:py-32 lg:py-40 text-center bg-gradient-to-br from-blue-600 to-purple-700 text-white overflow-hidden">
-        {/* Subtle background pattern/overlay */}
         <div className="absolute inset-0 z-0 opacity-10" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.2\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0 20v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 46v-4h-2v4H0v2h4v4h2v-4h4v-2H6zM36 0v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 8v-4h-2v4H0v2h4v4h2v-4h4v-2H6zM36 12v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM18 12v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM18 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM18 0v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM0 20v-4h-2v4H0v2h4v4h2v-4h4v-2H6zM0 34v-4h-2v4H0v2h4v4h2v-4h4v-2H6zM42 20v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM42 42v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM42 0v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM0 0v-4h-2v4H0v2h4v4h2v-4h4v-2H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }}
         ></div>
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,7 +49,6 @@ export const About = () => {
         </div>
       </section>
 
-      {/* Our Mission Section */}
       <section className="py-20 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="md:pr-8 text-center md:text-left px-4">
@@ -68,13 +63,11 @@ export const About = () => {
             </p>
           </div>
           <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden p-6 md:p-8 transform hover:scale-105 transition-transform duration-300">
-            {/* Placeholder image for mission */}
             <img
               src={logo}
               alt="Our Mission"
               className="w-full h-auto rounded-lg shadow-lg"
             />
-            {/* Optional text overlay on image */}
             <div className="absolute bottom-4 left-4 right-4 bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm p-3 rounded-lg text-center text-sm font-medium text-gray-800 dark:text-gray-200">
               Transforming careers, one resume at a time.
             </div>
@@ -82,7 +75,6 @@ export const About = () => {
         </div>
       </section>
 
-      {/* Our Values Section */}
       <section className="py-20 md:py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-12">
@@ -95,7 +87,7 @@ export const About = () => {
                 className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 flex flex-col items-center text-center
                            transform hover:scale-105 transition-transform duration-300 border border-transparent hover:border-blue-300 dark:hover:border-blue-600"
               >
-                <value.icon size={48} className="text-blue-600 dark:text-blue-400 mb-6" /> {/* Render icon component */}
+                <value.icon size={48} className="text-blue-600 dark:text-blue-400 mb-6" /> 
                 <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-3">{value.title}</h3>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{value.description}</p>
               </div>
@@ -104,16 +96,13 @@ export const About = () => {
         </div>
       </section>
 
-      {/* Our Story Section */}
       <section className="py-20 md:py-24  text-center md:text-left px-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden p-6 md:p-8 order-2 md:order-1 transform hover:scale-105 transition-transform duration-300">
-            {/* Placeholder video for story */}
             <video width="640" height="360"  autoPlay loop muted>
                 <source src={logo1} type="video/mp4" />
                     Your browser does not support the video tag.
             </video>
-            {/* Optional text overlay on video*/}
             <div className="absolute bottom-4 left-4 right-4 bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm p-3 rounded-lg text-center text-sm font-medium text-gray-800 dark:text-gray-200">
               From an idea to empowering thousands.
             </div>
@@ -132,7 +121,6 @@ export const About = () => {
         </div>
       </section>
 
-      {/* Call to Action Section */}
       <section className="py-20 md:py-24 text-center bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
@@ -142,7 +130,7 @@ export const About = () => {
             Join thousands of satisfied job seekers who have landed interviews with ResumeChecker.
           </p>
           <button
-            onClick={handleStartAnalysis} // Link to your upload section
+            onClick={handleStartAnalysis} 
             className="inline-block bg-white text-blue-600 font-bold py-4 px-10 rounded-full text-xl shadow-lg
                        hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 ease-in-out"
           >
@@ -151,7 +139,6 @@ export const About = () => {
         </div>
       </section>
 
-      {/* Tailwind CSS Custom Animations (if not already in global CSS) */}
       <style jsx>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(20px); }
